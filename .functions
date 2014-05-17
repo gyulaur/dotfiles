@@ -21,11 +21,6 @@ function mkd() {
 	mkdir -p "$@" && cd "$@"
 }
 
-# Change working directory to the top-most Finder window location
-function cdf() { # short for `cdfinder`
-	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
-}
-
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 function targz() {
 	local tmpFile="${@%/}.tar"
@@ -245,13 +240,6 @@ function unquarantine() {
 	done
 }
 
-# Install Grunt plugins and add them as `devDependencies` to `package.json`
-# Usage: `gi contrib-watch contrib-uglify zopfli`
-function gi() {
-	local IFS=,
-	eval npm install --save-dev grunt-{"$*"}
-}
-
 # `m` with no arguments opens the current directory in TextMate, otherwise
 # opens the given location
 function m() {
@@ -259,36 +247,6 @@ function m() {
 		mate .
 	else
 		mate "$@"
-	fi
-}
-
-# `s` with no arguments opens the current directory in Sublime Text, otherwise
-# opens the given location
-function s() {
-	if [ $# -eq 0 ]; then
-		subl .
-	else
-		subl "$@"
-	fi
-}
-
-# `a` with no arguments opens the current directory in Atom Editor, otherwise
-# opens the given location
-function a() {
-	if [ $# -eq 0 ]; then
-		atom .
-	else
-		atom "$@"
-	fi
-}
-
-# `v` with no arguments opens the current directory in Vim, otherwise opens the
-# given location
-function v() {
-	if [ $# -eq 0 ]; then
-		vim .
-	else
-		vim "$@"
 	fi
 }
 
@@ -300,19 +258,6 @@ function o() {
 	else
 		open "$@"
 	fi
-}
-
-# `np` with an optional argument `patch`/`minor`/`major`/`<version>`
-# defaults to `patch`
-function np() {
-	git pull --rebase && \
-	rm -rf node_modules && \
-	npm install && \
-	npm test && \
-	npm version ${1:=patch} && \
-	npm publish && \
-	git push origin master && \
-	git push origin master --tags
 }
 
 # `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
